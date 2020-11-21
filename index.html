@@ -1,0 +1,50 @@
+<title>wlink</title>
+
+<!-- Redirection code -->
+<script>
+    // Used to indicate failure
+    const NOT_FOUND = '/404.html';
+
+    // Used to ensure URLs have the http/s scheme
+    const httpize = url => url.startsWith('http') || url.startsWith('/') ? url : 'http://' + url;
+
+    async function process(slug) {
+
+        // Read the links CSV file, go to 404 in case of failure
+        const linksUrl = new URL('https://docs.google.com/spreadsheets/d/e/2PACX-1vSodSacKvSg7Nktcli79X2lc0oN4-09ZlRmJ_zl4TLFlGtgbbhWhSw-o85orDaY5fia4m9yOeKgGHJ5/pub?gid=1326544356&single=true&output=csv');
+        linksUrl.searchParams.append('path', slug);
+        const res = await fetch(linksUrl);
+        if (!res.ok) return NOT_FOUND;
+
+        // Process the rows and header of the CSV data
+        const rows = (await res.text()).split('\n').map(row => row.trim());
+        const header = rows.shift().split(',');
+
+        // Perform a linear search over the rows in reverse order
+        for (let row of rows.reverse()) {
+            try {
+                const [path, redirect] = row.split(',', 3).slice(0, 2);
+                if (path === slug) return redirect;
+            } catch (exc) {
+                // no-op
+            }
+        }
+
+        // If everything else fails, send to the 404 page
+        return NOT_FOUND;
+    }
+
+    (async function () {
+        try {
+            const url = new URL(window.location.href);
+            if (url.searchParams.has('path')) {
+                window.location.href = httpize(await process(url.searchParams.get('path')));
+            } else {
+                window.location.href = httpize('https://github.com/owahltinez/wlink');
+            }
+
+        } catch (exc) {
+            window.location.href = httpize(NOT_FOUND);
+        }
+    })();
+</script>
