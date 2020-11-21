@@ -1,4 +1,13 @@
-<title>wlink</title>
+<title>WTZ Short Link</title>
+
+<!-- Google Analytics -->
+<script src="https://www.googletagmanager.com/gtag/js?id=G-XVRMMYBGGP"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-XVRMMYBGGP');
+</script>
 
 <!-- Redirection code -->
 <script>
@@ -11,7 +20,7 @@
     async function process(slug) {
 
         // Read the links CSV file, go to 404 in case of failure
-        const linksUrl = new URL('https://docs.google.com/spreadsheets/d/e/2PACX-1vSodSacKvSg7Nktcli79X2lc0oN4-09ZlRmJ_zl4TLFlGtgbbhWhSw-o85orDaY5fia4m9yOeKgGHJ5/pub?gid=1326544356&single=true&output=csv');
+        const linksUrl = new URL('https://short-links.omtinez.workers.dev');
         linksUrl.searchParams.append('path', slug);
         const res = await fetch(linksUrl);
         if (!res.ok) return NOT_FOUND;
@@ -40,7 +49,7 @@
             if (url.searchParams.has('path')) {
                 window.location.href = httpize(await process(url.searchParams.get('path')));
             } else {
-                window.location.href = httpize('https://github.com/owahltinez/wlink');
+                window.location.href = httpize('https://wahltinez.org');
             }
 
         } catch (exc) {
