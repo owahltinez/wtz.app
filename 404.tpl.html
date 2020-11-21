@@ -1,5 +1,14 @@
 <title>${title}</title>
 
+<!-- Google Analytics -->
+<script src="https://www.googletagmanager.com/gtag/js?id=${gtag}"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', '${gtag}');
+</script>
+
 <!-- Redirection code -->
 <script>
     window.location.href = '${root}';
