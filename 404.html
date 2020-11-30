@@ -1,4 +1,5 @@
 <title>WTZ Short Link</title>
+
 <body>Redirecting...</body>
 
 <!-- Google Analytics -->
@@ -16,7 +17,7 @@
     const NOT_FOUND = '/not-found.html';
 
     // Used to ensure URLs have the http/s scheme
-    const httpize = url => url.startsWith('http') || url.startsWith('/') ? url : 'http://' + url;
+    const httpize = url => url.startsWith('http') || url.startsWith('/') ? url : 'https://' + url;
 
     async function process(slug) {
 
@@ -46,14 +47,14 @@
 
     (async function () {
         try {
+            const search = window.location.search;
             const url = new URL(window.location.href);
             if (url.searchParams.has('path')) {
-                window.location.href = httpize(await process(url.searchParams.get('path')));
+                window.location.href = httpize(await process(url.searchParams.get('path'))) + search;
             } else if (url.pathname !== '/') {
-                window.location.href = httpize(await process(url.pathname.slice(1)));
+                window.location.href = httpize(await process(url.pathname.slice(1))) + search;
             } else {
-                console.log(url)
-                window.location.href = httpize('https://wahltinez.org');
+                window.location.href = httpize('https://wahltinez.org') + search;
             }
 
         } catch (exc) {
