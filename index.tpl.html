@@ -1,4 +1,5 @@
 <title>${title}</title>
+
 <body>Redirecting...</body>
 
 <!-- Google Analytics -->
@@ -46,14 +47,14 @@
 
     (async function () {
         try {
+            const search = window.location.search;
             const url = new URL(window.location.href);
             if (url.searchParams.has('path')) {
-                window.location.href = httpize(await process(url.searchParams.get('path')));
+                window.location.href = httpize(await process(url.searchParams.get('path'))) + search;
             } else if (url.pathname !== '/') {
-                window.location.href = httpize(await process(url.pathname.slice(1)));
+                window.location.href = httpize(await process(url.pathname.slice(1))) + search;
             } else {
-                console.log(url)
-                window.location.href = httpize('${root}');
+                window.location.href = httpize('${root}') + search;
             }
 
         } catch (exc) {
