@@ -16,7 +16,7 @@
     const NOT_FOUND = '/not-found.html';
 
     // Used to ensure URLs have the http/s scheme
-    const httpize = url => url.startsWith('http') || url.startsWith('/') ? url : 'http://' + url;
+    const httpize = url => url.startsWith('http') || url.startsWith('/') ? url : 'https://' + url;
 
     async function process(slug) {
 
